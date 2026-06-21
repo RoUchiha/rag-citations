@@ -2,6 +2,16 @@
 
 **⚡ [Live demo on Hugging Face Spaces](https://huggingface.co/spaces/rosingh/ai-ml-portfolio-demos)** (RAG tab) — ask a grounded question and see every citation verified.
 
+## 🧠 In plain English
+
+**The problem:** "RAG" means giving an AI your documents so it answers from them instead of from memory (which it makes up). Two things go wrong: it can't find the right document, or it writes a confident answer with a **fake citation** — pointing to a source that doesn't actually say what it claims.
+
+**The fix (analogy):** a research assistant who (a) searches both by *topic* and by *exact keywords*, and (b) shows you the highlighted sentence backing every claim — and crosses out any claim they can't back up.
+
+**How it works:** documents are split into chunks → a question runs a **meaning search** (embeddings) and a **keyword search** (BM25) *at the same time* → the two result lists are **fused** into one ranking → the AI answers, tagging each sentence with the chunk it used → a **verifier** strips any citation that isn't really supported → if nothing relevant was found, it says *"insufficient evidence"* instead of inventing.
+
+**Why both halves matter:** meaning-search and keyword-search miss in *opposite* ways (embeddings miss exact terms like error codes; keywords miss paraphrases). Combining them catches both — and verification makes the answer *actually* sourced, not just sourced-looking.
+
 A retrieval-augmented generation pipeline that (a) retrieves with **hybrid search**
 (dense embeddings + sparse BM25, fused with **Reciprocal Rank Fusion**), (b) generates
 grounded answers with inline `[chunk_id]` citations, and (c) **verifies every citation** —
